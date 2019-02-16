@@ -20,20 +20,20 @@ fi
 
 git clone -b "$BB_CHECKOUT" "$BB_REPO" "buildbot"
 
-/app/.heroku/python/bin/pip install mock | cleanup | indent
-/app/.heroku/python/bin/pip install -e "buildbot/master" | cleanup | indent
-/app/.heroku/python/bin/pip install -e "buildbot/pkg" | cleanup | indent
+pip install mock | cleanup | indent
+pip install -e "buildbot/master" | cleanup | indent
+pip install -e "buildbot/pkg" | cleanup | indent
 
 puts-step 'Installing buildbot plugins (this may take quite a long time)'
 OLD_IFS=IFS
 IFS=','
 for plugin in $BB_WWW_PLUGINS; do
-    /app/.heroku/python/bin/pip install -v -e "buildbot/www/$plugin" | cleanup | indent
+    pip install -v -e "buildbot/www/$plugin" | cleanup | indent
 done
 IFS=OLD_IFS
 
 
-/app/.heroku/python/bin/buildbot create-master master
+buildbot create-master master
 
 puts-step 'Copying config file'
 if [ ! -f "$BUILD_DIR/master.cfg" ]; then
